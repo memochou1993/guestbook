@@ -12,8 +12,6 @@ class StoreSignature extends FormRequest
      *
      * @param  \Illuminate\Contracts\Validation\Validator  $validator
      * @return void
-     *
-     * @throws \Illuminate\Validation\ValidationException
      */
     protected function failedValidation(Validator $validator)
     {
