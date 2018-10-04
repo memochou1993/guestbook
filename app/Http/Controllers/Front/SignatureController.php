@@ -14,7 +14,7 @@ class SignatureController extends Controller
      */
     public function index()
     {
-        //
+        return view('signature.index');
     }
 
     /**
