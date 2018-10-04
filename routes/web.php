@@ -14,3 +14,9 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::namespace('Front')->group(function () {
+    Route::resource('signatures', 'SignatureController')->only([
+        'index', 'create', 'edit'
+    ]);
+});
