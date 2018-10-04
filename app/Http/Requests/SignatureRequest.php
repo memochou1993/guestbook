@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 
-class StoreSignature extends FormRequest
+class SignatureRequest extends FormRequest
 {
     /**
      * Handle a failed validation attempt.

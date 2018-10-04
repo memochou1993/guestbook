@@ -15,8 +15,6 @@ class Signature extends Model
      * @var array
      */
     protected $fillable = [
-        'name',
-        'email',
-        'content',
+        'name', 'email', 'content',
     ];
 }
