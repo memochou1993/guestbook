@@ -18,7 +18,7 @@ class SignatureController extends Controller
      */
     public function index(Signature $signature)
     {
-        return SignatureResource::collection($signature->paginate(5));
+        return SignatureResource::collection($signature->paginate(request()->per_page));
     }
 
     /**
