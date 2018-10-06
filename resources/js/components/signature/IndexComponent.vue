@@ -1,5 +1,12 @@
 <template>
     <div>
+        <select v-model="per_page">
+            <option disabled>顯示筆數</option>
+            <option>5</option>
+            <option>10</option>
+            <option>15</option>
+        </select>
+
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -56,8 +63,9 @@
     export default {
         data() {
             return {
-                url: '/api/signatures?page=',
-                each_side: 3,
+                url: '/api/signatures',
+                per_page: 10,
+                pagination_size: 7,
                 data: [],
                 links: [],
                 meta: [],
@@ -65,40 +73,46 @@
             };
         },
         created() {
-            this.fetch(this.url);
+            this.fetch();
+        },
+        watch: {
+            per_page() {
+                this.fetch();
+            }
         },
         methods: {
-            fetch: function (url) {
-                axios.get(url)
+            fetch: function (url = this.url, per_page = this.per_page) {
+                axios.get(url + '&per_page=' + per_page)
                     .then(({data}) => {
                         this.data = data.data;
                         this.links = data.links;
                         this.meta = data.meta;
-                        setTimeout(this.paginate(this.meta, this.each_side), 3000);
-                        // this.paginate(this.meta, this.each_side);
+                        this.paginate();
                     });
             },
-            paginate: function (meta, each_side) {
+            paginate: function (meta = this.meta, pagination_size = this.pagination_size) {
                 let arr = [];
-                let start;
+                let begin;
                 let end;
 
                 switch (true) {
-                    case (meta.current_page <= each_side):
-                        start = 1;
-                        end = each_side * 2 + 1;
+                    case (meta.current_page <= (this.pagination_size - 1) / 2):
+                        begin = 1;
+                        end = this.pagination_size;
                     break;
-                    case (meta.current_page >=  meta.last_page - each_side):
-                        start = meta.last_page - (each_side * 2);
+
+                    case (meta.current_page >= meta.last_page - (this.pagination_size - 1) / 2):
+                        begin = meta.last_page - (this.pagination_size - 1);
                         end = meta.last_page;
                     break;
+
                     default:
-                        start = meta.current_page - each_side;
-                        end = meta.current_page + each_side;
+                        begin = meta.current_page - (this.pagination_size - 1) / 2;
+                        end = meta.current_page + (this.pagination_size - 1) / 2;
                 }
 
-                for (let i = start; i <= end; i++) {
-                    arr.push(i);
+                for (let i = begin; i <= end; i++) {
+                    arr.push('?page=' + i);
                 }
 
                 this.pages = arr;

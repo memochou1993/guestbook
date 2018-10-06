@@ -16,9 +16,9 @@ class SignatureController extends Controller
      * @param  \App\Signature  $signature
      * @return \Illuminate\Http\Response
      */
-    public function index(Signature $signature)
+    public function index(Request $request, Signature $signature)
     {
-        return SignatureResource::collection($signature->paginate(request()->per_page));
+        return SignatureResource::collection($signature->paginate($request->per_page));
     }
 
     /**

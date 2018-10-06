@@ -13988,7 +13988,7 @@ module.exports = function normalizeComponent (
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(13);
-module.exports = __webpack_require__(46);
+module.exports = __webpack_require__(51);
 
 
 /***/ }),
@@ -47416,13 +47416,13 @@ if (false) {
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(51)
+  __webpack_require__(44)
 }
 var normalizeComponent = __webpack_require__(11)
 /* script */
-var __vue_script__ = __webpack_require__(44)
+var __vue_script__ = __webpack_require__(49)
 /* template */
-var __vue_template__ = __webpack_require__(45)
+var __vue_template__ = __webpack_require__(50)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -47462,319 +47462,46 @@ module.exports = Component.exports
 
 /***/ }),
 /* 44 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+// style-loader: Adds some css to the DOM by adding a <style> tag
 
-/* harmony default export */ __webpack_exports__["default"] = ({
-    data: function data() {
-        return {
-            url: '/api/signatures?page=',
-            each_side: 3,
-            data: [],
-            links: [],
-            meta: [],
-            pages: []
-        };
-    },
-    created: function created() {
-        this.fetch(this.url);
-    },
-
-    methods: {
-        fetch: function fetch(url) {
-            var _this = this;
-
-            axios.get(url).then(function (_ref) {
-                var data = _ref.data;
-
-                _this.data = data.data;
-                _this.links = data.links;
-                _this.meta = data.meta;
-                setTimeout(_this.paginate(_this.meta, _this.each_side), 3000);
-                // this.paginate(this.meta, this.each_side);
-            });
-        },
-        paginate: function paginate(meta, each_side) {
-            var arr = [];
-            var start = void 0;
-            var end = void 0;
-
-            switch (true) {
-                case meta.current_page <= each_side:
-                    start = 1;
-                    end = each_side * 2 + 1;
-                    break;
-                case meta.current_page >= meta.last_page - each_side:
-                    start = meta.last_page - each_side * 2;
-                    end = meta.last_page;
-                    break;
-                default:
-                    start = meta.current_page - each_side;
-                    end = meta.current_page + each_side;
-            }
-
-            for (var i = start; i <= end; i++) {
-                arr.push(i);
-            }
-
-            this.pages = arr;
-        }
-    }
-});
+// load the styles
+var content = __webpack_require__(45);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(47)("54439fc6", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-f2fc2e26\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./IndexComponent.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-f2fc2e26\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./IndexComponent.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
 
 /***/ }),
 /* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("table", { staticClass: "table table-striped" }, [
-      _vm._m(0),
-      _vm._v(" "),
-      _c(
-        "tbody",
-        _vm._l(_vm.data, function(signature) {
-          return _c("tr", { key: signature.index }, [
-            _c("td", [_vm._v(_vm._s(signature.id))]),
-            _vm._v(" "),
-            _c("td", [_vm._v(_vm._s(signature.name))]),
-            _vm._v(" "),
-            _c("td", [_vm._v(_vm._s(signature.content))])
-          ])
-        })
-      )
-    ]),
-    _vm._v(" "),
-    _c("nav", { attrs: { "aria-label": "Page navigation" } }, [
-      _c(
-        "ul",
-        { staticClass: "pagination" },
-        [
-          _c(
-            "li",
-            {
-              staticClass: "page-item",
-              class: [_vm.meta.current_page == 1 ? "disabled" : ""]
-            },
-            [
-              _c(
-                "a",
-                {
-                  staticClass: "page-link",
-                  attrs: { href: "" },
-                  on: {
-                    click: function($event) {
-                      $event.preventDefault()
-                      _vm.fetch(_vm.links.first)
-                    }
-                  }
-                },
-                [_vm._v("第一頁")]
-              )
-            ]
-          ),
-          _vm._v(" "),
-          _c(
-            "li",
-            {
-              staticClass: "page-item",
-              class: [_vm.meta.current_page == 1 ? "disabled" : ""]
-            },
-            [
-              _c(
-                "a",
-                {
-                  staticClass: "page-link",
-                  attrs: { href: "" },
-                  on: {
-                    click: function($event) {
-                      $event.preventDefault()
-                      _vm.fetch(_vm.links.prev)
-                    }
-                  }
-                },
-                [_vm._v("上一頁")]
-              )
-            ]
-          ),
-          _vm._v(" "),
-          _vm._l(_vm.pages, function(page) {
-            return _c(
-              "li",
-              {
-                key: page.index,
-                staticClass: "page-item",
-                class: [page == _vm.meta.current_page ? "active" : ""]
-              },
-              [
-                _c(
-                  "a",
-                  {
-                    staticClass: "page-link",
-                    attrs: { href: "" },
-                    on: {
-                      click: function($event) {
-                        $event.preventDefault()
-                        _vm.fetch(_vm.url + page)
-                      }
-                    }
-                  },
-                  [_vm._v(_vm._s(page))]
-                )
-              ]
-            )
-          }),
-          _vm._v(" "),
-          _c(
-            "li",
-            {
-              staticClass: "page-item",
-              class: [
-                _vm.meta.current_page == _vm.meta.last_page ? "disabled" : ""
-              ]
-            },
-            [
-              _c(
-                "a",
-                {
-                  staticClass: "page-link",
-                  attrs: { href: "" },
-                  on: {
-                    click: function($event) {
-                      $event.preventDefault()
-                      _vm.fetch(_vm.links.next)
-                    }
-                  }
-                },
-                [_vm._v("下一頁")]
-              )
-            ]
-          ),
-          _vm._v(" "),
-          _c(
-            "li",
-            {
-              staticClass: "page-item",
-              class: [
-                _vm.meta.current_page == _vm.meta.last_page ? "disabled" : ""
-              ]
-            },
-            [
-              _c(
-                "a",
-                {
-                  staticClass: "page-link",
-                  attrs: { href: "" },
-                  on: {
-                    click: function($event) {
-                      $event.preventDefault()
-                      _vm.fetch(_vm.links.last)
-                    }
-                  }
-                },
-                [_vm._v("最後頁")]
-              )
-            ]
-          )
-        ],
-        2
-      )
-    ])
-  ])
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("th", [_vm._v("ID")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Name")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Content")])
-      ])
-    ])
-  }
-]
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-f2fc2e26", module.exports)
-  }
-}
+exports = module.exports = __webpack_require__(46)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.page-link:active {\n    z-index: 1;\n    color: #fff;\n    background-color: #3490dc;\n    border-color: #3490dc;\n}\n.page-link:focus {\n    -webkit-box-shadow: 0 0 0 0rem;\n            box-shadow: 0 0 0 0rem;\n}\n", ""]);
+
+// exports
+
 
 /***/ }),
 /* 46 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 47 */,
-/* 48 */
 /***/ (function(module, exports) {
 
 /*
@@ -47856,49 +47583,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 49 */,
-/* 50 */,
-/* 51 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(52);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(53)("43a3b22c", content, false, {});
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-f2fc2e26\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./IndexComponent.vue", function() {
-     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-f2fc2e26\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./IndexComponent.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 52 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(48)(false);
-// imports
-
-
-// module
-exports.push([module.i, "\n.page-link:active {\n    z-index: 1;\n    color: #fff;\n    background-color: #3490dc;\n    border-color: #3490dc;\n}\n.page-link:focus {\n    -webkit-box-shadow: 0 0 0 0rem;\n            box-shadow: 0 0 0 0rem;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 53 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -47917,7 +47602,7 @@ if (typeof DEBUG !== 'undefined' && DEBUG) {
   ) }
 }
 
-var listToStyles = __webpack_require__(54)
+var listToStyles = __webpack_require__(48)
 
 /*
 type StyleObject = {
@@ -48126,7 +47811,7 @@ function applyToTag (styleElement, obj) {
 
 
 /***/ }),
-/* 54 */
+/* 48 */
 /***/ (function(module, exports) {
 
 /**
@@ -48157,6 +47842,376 @@ module.exports = function listToStyles (parentId, list) {
   return styles
 }
 
+
+/***/ }),
+/* 49 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            url: '/api/signatures',
+            per_page: 10,
+            pagination_size: 7,
+            data: [],
+            links: [],
+            meta: [],
+            pages: []
+        };
+    },
+    created: function created() {
+        this.fetch();
+    },
+
+    watch: {
+        per_page: function per_page() {
+            this.fetch();
+        }
+    },
+    methods: {
+        fetch: function fetch() {
+            var _this = this;
+
+            var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.url;
+            var per_page = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.per_page;
+
+            axios.get(url + '&per_page=' + per_page).then(function (_ref) {
+                var data = _ref.data;
+
+                _this.data = data.data;
+                _this.links = data.links;
+                _this.meta = data.meta;
+                _this.paginate();
+            });
+        },
+        paginate: function paginate() {
+            var meta = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.meta;
+            var pagination_size = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.pagination_size;
+
+            var arr = [];
+            var begin = void 0;
+            var end = void 0;
+
+            switch (true) {
+                case meta.current_page <= (this.pagination_size - 1) / 2:
+                    begin = 1;
+                    end = this.pagination_size;
+                    break;
+
+                case meta.current_page >= meta.last_page - (this.pagination_size - 1) / 2:
+                    begin = meta.last_page - (this.pagination_size - 1);
+                    end = meta.last_page;
+                    break;
+
+                default:
+                    begin = meta.current_page - (this.pagination_size - 1) / 2;
+                    end = meta.current_page + (this.pagination_size - 1) / 2;
+            }
+
+            for (var i = begin; i <= end; i++) {
+                arr.push('?page=' + i);
+            }
+
+            this.pages = arr;
+        }
+    }
+});
+
+/***/ }),
+/* 50 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c(
+      "select",
+      {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.per_page,
+            expression: "per_page"
+          }
+        ],
+        on: {
+          change: function($event) {
+            var $$selectedVal = Array.prototype.filter
+              .call($event.target.options, function(o) {
+                return o.selected
+              })
+              .map(function(o) {
+                var val = "_value" in o ? o._value : o.value
+                return val
+              })
+            _vm.per_page = $event.target.multiple
+              ? $$selectedVal
+              : $$selectedVal[0]
+          }
+        }
+      },
+      [
+        _c("option", { attrs: { disabled: "" } }, [_vm._v("顯示筆數")]),
+        _vm._v(" "),
+        _c("option", [_vm._v("5")]),
+        _vm._v(" "),
+        _c("option", [_vm._v("10")]),
+        _vm._v(" "),
+        _c("option", [_vm._v("15")])
+      ]
+    ),
+    _vm._v(" "),
+    _c("table", { staticClass: "table table-striped" }, [
+      _vm._m(0),
+      _vm._v(" "),
+      _c(
+        "tbody",
+        _vm._l(_vm.data, function(signature) {
+          return _c("tr", { key: signature.index }, [
+            _c("td", [_vm._v(_vm._s(signature.id))]),
+            _vm._v(" "),
+            _c("td", [_vm._v(_vm._s(signature.name))]),
+            _vm._v(" "),
+            _c("td", [_vm._v(_vm._s(signature.content))])
+          ])
+        })
+      )
+    ]),
+    _vm._v(" "),
+    _c("nav", { attrs: { "aria-label": "Page navigation" } }, [
+      _c(
+        "ul",
+        { staticClass: "pagination" },
+        [
+          _c(
+            "li",
+            {
+              staticClass: "page-item",
+              class: [_vm.meta.current_page == 1 ? "disabled" : ""]
+            },
+            [
+              _c(
+                "a",
+                {
+                  staticClass: "page-link",
+                  attrs: { href: "" },
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      _vm.fetch(_vm.links.first)
+                    }
+                  }
+                },
+                [_vm._v("第一頁")]
+              )
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "li",
+            {
+              staticClass: "page-item",
+              class: [_vm.meta.current_page == 1 ? "disabled" : ""]
+            },
+            [
+              _c(
+                "a",
+                {
+                  staticClass: "page-link",
+                  attrs: { href: "" },
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      _vm.fetch(_vm.links.prev)
+                    }
+                  }
+                },
+                [_vm._v("上一頁")]
+              )
+            ]
+          ),
+          _vm._v(" "),
+          _vm._l(_vm.pages, function(page) {
+            return _c(
+              "li",
+              {
+                key: page.index,
+                staticClass: "page-item",
+                class: [page == _vm.meta.current_page ? "active" : ""]
+              },
+              [
+                _c(
+                  "a",
+                  {
+                    staticClass: "page-link",
+                    attrs: { href: "" },
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        _vm.fetch(_vm.url + page)
+                      }
+                    }
+                  },
+                  [_vm._v(_vm._s(page))]
+                )
+              ]
+            )
+          }),
+          _vm._v(" "),
+          _c(
+            "li",
+            {
+              staticClass: "page-item",
+              class: [
+                _vm.meta.current_page == _vm.meta.last_page ? "disabled" : ""
+              ]
+            },
+            [
+              _c(
+                "a",
+                {
+                  staticClass: "page-link",
+                  attrs: { href: "" },
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      _vm.fetch(_vm.links.next)
+                    }
+                  }
+                },
+                [_vm._v("下一頁")]
+              )
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "li",
+            {
+              staticClass: "page-item",
+              class: [
+                _vm.meta.current_page == _vm.meta.last_page ? "disabled" : ""
+              ]
+            },
+            [
+              _c(
+                "a",
+                {
+                  staticClass: "page-link",
+                  attrs: { href: "" },
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      _vm.fetch(_vm.links.last)
+                    }
+                  }
+                },
+                [_vm._v("最後頁")]
+              )
+            ]
+          )
+        ],
+        2
+      )
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("ID")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Name")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Content")])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-f2fc2e26", module.exports)
+  }
+}
+
+/***/ }),
+/* 51 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
 
 /***/ })
 /******/ ]);
