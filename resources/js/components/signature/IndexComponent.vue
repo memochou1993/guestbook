@@ -1,14 +1,5 @@
 <template>
     <div>
-        <div class="d-flex justify-content-end">
-            <select v-model="per_page">
-                <option disabled>顯示筆數</option>
-                <option>5</option>
-                <option>10</option>
-                <option>15</option>
-            </select>
-        </div>
-
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -27,7 +18,16 @@
                 </tr>
             </tbody>
         </table>
-        
+
+        <div class="d-flex justify-content-end">
+            顯示筆數：
+            <select v-model="per_page">
+                <option>5</option>
+                <option>10</option>
+                <option>15</option>
+            </select>
+        </div>
+
         <div class="d-flex justify-content-center">
             <nav aria-label="Page navigation">
                 <ul class="pagination">
