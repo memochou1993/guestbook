@@ -14014,6 +14014,7 @@ window.Vue = __webpack_require__(37);
 
 Vue.component('example-component', __webpack_require__(40));
 Vue.component('signature-index', __webpack_require__(43));
+Vue.component('signature-create', __webpack_require__(55));
 
 var app = new Vue({
   el: '#app'
@@ -47471,7 +47472,7 @@ var content = __webpack_require__(45);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(47)("54439fc6", content, false, {});
+var update = __webpack_require__(47)("43a3b22c", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -47910,13 +47911,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
         return {
             url: '/api/signatures',
-            per_page: 10,
-            pagination_size: 7,
+            per_page: 5,
+            pagination_size: 5,
             data: [],
             links: [],
             meta: [],
@@ -47936,10 +47943,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         fetch: function fetch() {
             var _this = this;
 
-            var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.url;
-            var per_page = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.per_page;
+            var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.url + '?page=';
 
-            axios.get(url + '&per_page=' + per_page).then(function (_ref) {
+            axios.get(url + '&per_page=' + this.per_page).then(function (_ref) {
                 var data = _ref.data;
 
                 _this.data = data.data;
@@ -47950,7 +47956,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         paginate: function paginate() {
             var meta = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.meta;
-            var pagination_size = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.pagination_size;
 
             var arr = [];
             var begin = void 0;
@@ -47973,10 +47978,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
 
             for (var i = begin; i <= end; i++) {
-                arr.push('?page=' + i);
+                arr.push(i);
             }
 
             this.pages = arr;
+        },
+        destroy: function destroy(id) {
+            var _this2 = this;
+
+            if (confirm('確定刪除？')) {
+                axios.delete(this.url + '/' + id).then(function (response) {
+                    _this2.data = _.remove(_this2.data, function (data) {
+                        return data.id !== id;
+                    });
+                    _this2.fetch(_this2.url + '?page=' + _this2.meta.current_page);
+                });
+            }
         }
     }
 });
@@ -47990,43 +48007,45 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c(
-      "select",
-      {
-        directives: [
-          {
-            name: "model",
-            rawName: "v-model",
-            value: _vm.per_page,
-            expression: "per_page"
+    _c("div", { staticClass: "d-flex justify-content-end" }, [
+      _c(
+        "select",
+        {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.per_page,
+              expression: "per_page"
+            }
+          ],
+          on: {
+            change: function($event) {
+              var $$selectedVal = Array.prototype.filter
+                .call($event.target.options, function(o) {
+                  return o.selected
+                })
+                .map(function(o) {
+                  var val = "_value" in o ? o._value : o.value
+                  return val
+                })
+              _vm.per_page = $event.target.multiple
+                ? $$selectedVal
+                : $$selectedVal[0]
+            }
           }
-        ],
-        on: {
-          change: function($event) {
-            var $$selectedVal = Array.prototype.filter
-              .call($event.target.options, function(o) {
-                return o.selected
-              })
-              .map(function(o) {
-                var val = "_value" in o ? o._value : o.value
-                return val
-              })
-            _vm.per_page = $event.target.multiple
-              ? $$selectedVal
-              : $$selectedVal[0]
-          }
-        }
-      },
-      [
-        _c("option", { attrs: { disabled: "" } }, [_vm._v("顯示筆數")]),
-        _vm._v(" "),
-        _c("option", [_vm._v("5")]),
-        _vm._v(" "),
-        _c("option", [_vm._v("10")]),
-        _vm._v(" "),
-        _c("option", [_vm._v("15")])
-      ]
-    ),
+        },
+        [
+          _c("option", { attrs: { disabled: "" } }, [_vm._v("顯示筆數")]),
+          _vm._v(" "),
+          _c("option", [_vm._v("5")]),
+          _vm._v(" "),
+          _c("option", [_vm._v("10")]),
+          _vm._v(" "),
+          _c("option", [_vm._v("15")])
+        ]
+      )
+    ]),
     _vm._v(" "),
     _c("table", { staticClass: "table table-striped" }, [
       _vm._m(0),
@@ -48039,72 +48058,39 @@ var render = function() {
             _vm._v(" "),
             _c("td", [_vm._v(_vm._s(signature.name))]),
             _vm._v(" "),
-            _c("td", [_vm._v(_vm._s(signature.content))])
+            _c("td", [_vm._v(_vm._s(signature.content))]),
+            _vm._v(" "),
+            _c("td", [
+              _c(
+                "a",
+                {
+                  attrs: { href: "" },
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      _vm.destroy(signature.id)
+                    }
+                  }
+                },
+                [_vm._v("刪除")]
+              )
+            ])
           ])
         })
       )
     ]),
     _vm._v(" "),
-    _c("nav", { attrs: { "aria-label": "Page navigation" } }, [
-      _c(
-        "ul",
-        { staticClass: "pagination" },
-        [
-          _c(
-            "li",
-            {
-              staticClass: "page-item",
-              class: [_vm.meta.current_page == 1 ? "disabled" : ""]
-            },
-            [
-              _c(
-                "a",
-                {
-                  staticClass: "page-link",
-                  attrs: { href: "" },
-                  on: {
-                    click: function($event) {
-                      $event.preventDefault()
-                      _vm.fetch(_vm.links.first)
-                    }
-                  }
-                },
-                [_vm._v("第一頁")]
-              )
-            ]
-          ),
-          _vm._v(" "),
-          _c(
-            "li",
-            {
-              staticClass: "page-item",
-              class: [_vm.meta.current_page == 1 ? "disabled" : ""]
-            },
-            [
-              _c(
-                "a",
-                {
-                  staticClass: "page-link",
-                  attrs: { href: "" },
-                  on: {
-                    click: function($event) {
-                      $event.preventDefault()
-                      _vm.fetch(_vm.links.prev)
-                    }
-                  }
-                },
-                [_vm._v("上一頁")]
-              )
-            ]
-          ),
-          _vm._v(" "),
-          _vm._l(_vm.pages, function(page) {
-            return _c(
+    _c("div", { staticClass: "d-flex justify-content-center" }, [
+      _c("nav", { attrs: { "aria-label": "Page navigation" } }, [
+        _c(
+          "ul",
+          { staticClass: "pagination" },
+          [
+            _c(
               "li",
               {
-                key: page.index,
                 staticClass: "page-item",
-                class: [page == _vm.meta.current_page ? "active" : ""]
+                class: [_vm.meta.current_page == 1 ? "disabled" : ""]
               },
               [
                 _c(
@@ -48115,70 +48101,121 @@ var render = function() {
                     on: {
                       click: function($event) {
                         $event.preventDefault()
-                        _vm.fetch(_vm.url + page)
+                        _vm.fetch(_vm.links.first)
                       }
                     }
                   },
-                  [_vm._v(_vm._s(page))]
+                  [_vm._v("第一頁")]
+                )
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "li",
+              {
+                staticClass: "page-item",
+                class: [_vm.meta.current_page == 1 ? "disabled" : ""]
+              },
+              [
+                _c(
+                  "a",
+                  {
+                    staticClass: "page-link",
+                    attrs: { href: "" },
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        _vm.fetch(_vm.links.prev)
+                      }
+                    }
+                  },
+                  [_vm._v("上一頁")]
+                )
+              ]
+            ),
+            _vm._v(" "),
+            _vm._l(_vm.pages, function(page) {
+              return _c(
+                "li",
+                {
+                  key: page.index,
+                  staticClass: "page-item",
+                  class: [page == _vm.meta.current_page ? "active" : ""]
+                },
+                [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "page-link",
+                      attrs: { href: "" },
+                      on: {
+                        click: function($event) {
+                          $event.preventDefault()
+                          _vm.fetch(_vm.url + "?page=" + page)
+                        }
+                      }
+                    },
+                    [_vm._v(_vm._s(page))]
+                  )
+                ]
+              )
+            }),
+            _vm._v(" "),
+            _c(
+              "li",
+              {
+                staticClass: "page-item",
+                class: [
+                  _vm.meta.current_page == _vm.meta.last_page ? "disabled" : ""
+                ]
+              },
+              [
+                _c(
+                  "a",
+                  {
+                    staticClass: "page-link",
+                    attrs: { href: "" },
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        _vm.fetch(_vm.links.next)
+                      }
+                    }
+                  },
+                  [_vm._v("下一頁")]
+                )
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "li",
+              {
+                staticClass: "page-item",
+                class: [
+                  _vm.meta.current_page == _vm.meta.last_page ? "disabled" : ""
+                ]
+              },
+              [
+                _c(
+                  "a",
+                  {
+                    staticClass: "page-link",
+                    attrs: { href: "" },
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        _vm.fetch(_vm.links.last)
+                      }
+                    }
+                  },
+                  [_vm._v("最後頁")]
                 )
               ]
             )
-          }),
-          _vm._v(" "),
-          _c(
-            "li",
-            {
-              staticClass: "page-item",
-              class: [
-                _vm.meta.current_page == _vm.meta.last_page ? "disabled" : ""
-              ]
-            },
-            [
-              _c(
-                "a",
-                {
-                  staticClass: "page-link",
-                  attrs: { href: "" },
-                  on: {
-                    click: function($event) {
-                      $event.preventDefault()
-                      _vm.fetch(_vm.links.next)
-                    }
-                  }
-                },
-                [_vm._v("下一頁")]
-              )
-            ]
-          ),
-          _vm._v(" "),
-          _c(
-            "li",
-            {
-              staticClass: "page-item",
-              class: [
-                _vm.meta.current_page == _vm.meta.last_page ? "disabled" : ""
-              ]
-            },
-            [
-              _c(
-                "a",
-                {
-                  staticClass: "page-link",
-                  attrs: { href: "" },
-                  on: {
-                    click: function($event) {
-                      $event.preventDefault()
-                      _vm.fetch(_vm.links.last)
-                    }
-                  }
-                },
-                [_vm._v("最後頁")]
-              )
-            ]
-          )
-        ],
-        2
-      )
+          ],
+          2
+        )
+      ])
     ])
   ])
 }
@@ -48189,11 +48226,13 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("thead", [
       _c("tr", [
-        _c("th", [_vm._v("ID")]),
+        _c("th", [_vm._v("編號")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Name")]),
+        _c("th", [_vm._v("名字")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Content")])
+        _c("th", [_vm._v("內容")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("訊息")])
       ])
     ])
   }
@@ -48212,6 +48251,359 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 52 */,
+/* 53 */,
+/* 54 */,
+/* 55 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(11)
+/* script */
+var __vue_script__ = __webpack_require__(56)
+/* template */
+var __vue_template__ = __webpack_require__(57)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/components/signature/CreateComponent.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-e909e1a2", Component.options)
+  } else {
+    hotAPI.reload("data-v-e909e1a2", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 56 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            signature: {
+                name: null,
+                email: null,
+                content: null
+            },
+            saved: false,
+            errors: []
+        };
+    },
+
+    methods: {
+        onSubmit: function onSubmit() {
+            var _this = this;
+
+            this.saved = false;
+            axios.post('/api/signatures', this.signature, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(function (_ref) {
+                var data = _ref.data;
+
+                _this.success();
+            }).catch(function (_ref2) {
+                var response = _ref2.response;
+
+                _this.error(response.data);
+            });
+        },
+        success: function success() {
+            this.saved = true;
+            this.reset();
+        },
+        error: function error(data) {
+            this.errors = data;
+        },
+        reset: function reset() {
+            this.errors = [];
+            this.signature = {
+                name: null,
+                email: null,
+                content: null
+            };
+        }
+    }
+});
+
+/***/ }),
+/* 57 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("div", [
+      _c(
+        "form",
+        {
+          attrs: { method: "post" },
+          on: {
+            submit: function($event) {
+              $event.preventDefault()
+              return _vm.onSubmit($event)
+            }
+          }
+        },
+        [
+          _c("fieldset", [
+            _c("legend", { staticClass: "text-center" }, [_vm._v("GuestBook")]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", { attrs: { for: "name" } }, [_vm._v("名字")]),
+              _vm._v(" "),
+              _c("div", [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.signature.name,
+                      expression: "signature.name"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  class: { "is-invalid": _vm.errors.name },
+                  attrs: {
+                    type: "text",
+                    minlength: "3",
+                    maxlength: "30",
+                    id: "name",
+                    required: ""
+                  },
+                  domProps: { value: _vm.signature.name },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.signature, "name", $event.target.value)
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _vm.errors.name
+                  ? _c("span", { staticClass: "invalid-feedback" }, [
+                      _vm._v(_vm._s(_vm.errors.name[0]))
+                    ])
+                  : _vm._e()
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", { attrs: { for: "email" } }, [_vm._v("信箱")]),
+              _vm._v(" "),
+              _c("div", [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.signature.email,
+                      expression: "signature.email"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  class: { "is-invalid": _vm.errors.email },
+                  attrs: {
+                    type: "email",
+                    minlength: "3",
+                    maxlength: "30",
+                    id: "email",
+                    required: ""
+                  },
+                  domProps: { value: _vm.signature.email },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.signature, "email", $event.target.value)
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _vm.errors.email
+                  ? _c("span", { staticClass: "invalid-feedback" }, [
+                      _vm._v(_vm._s(_vm.errors.email[0]))
+                    ])
+                  : _vm._e()
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", { attrs: { for: "content" } }, [_vm._v("訊息")]),
+              _vm._v(" "),
+              _c("div", [
+                _c("textarea", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.signature.content,
+                      expression: "signature.content"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  class: { "is-invalid": _vm.errors.content },
+                  attrs: { id: "content", rows: "5", required: "" },
+                  domProps: { value: _vm.signature.content },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.signature, "content", $event.target.value)
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _vm.errors.content
+                  ? _c("span", { staticClass: "invalid-feedback" }, [
+                      _vm._v(_vm._s(_vm.errors.content[0]))
+                    ])
+                  : _vm._e()
+              ])
+            ]),
+            _vm._v(" "),
+            _vm._m(0)
+          ])
+        ]
+      ),
+      _vm._v(" "),
+      _vm.saved
+        ? _c("div", { staticClass: "alert alert-success" }, [
+            _c("strong", [_vm._v("成功！")]),
+            _vm._v("表單已送出！\n        ")
+          ])
+        : _vm._e()
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-group" }, [
+      _c("div", { staticClass: "col-md-12 text-right" }, [
+        _c(
+          "button",
+          { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+          [_vm._v("Submit")]
+        )
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-e909e1a2", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

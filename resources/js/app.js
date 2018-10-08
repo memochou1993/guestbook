@@ -17,6 +17,7 @@ window.Vue = require('vue');
 
 Vue.component('example-component', require('./components/ExampleComponent.vue'));
 Vue.component('signature-index', require('./components/signature/IndexComponent.vue'));
+Vue.component('signature-create', require('./components/signature/CreateComponent.vue'));
 
 const app = new Vue({
     el: '#app',

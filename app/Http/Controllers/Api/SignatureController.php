@@ -31,7 +31,7 @@ class SignatureController extends Controller
     public function store(SignatureRequest $request, Signature $signature)
     {
         if ($request->validator) {
-            return $request->validator->errors();
+            return response($request->validator->errors(), 400);
         }
 
         $signature = $signature->create($request->all());
@@ -60,7 +60,7 @@ class SignatureController extends Controller
     public function update(SignatureRequest $request, Signature $signature)
     {
         if ($request->validator) {
-            return $request->validator->errors();
+            return response($request->validator->errors(), 400);
         }
 
         $signature->update($request->all());

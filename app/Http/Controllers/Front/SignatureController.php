@@ -24,7 +24,7 @@ class SignatureController extends Controller
      */
     public function create()
     {
-        //
+        return view('signature.create');
     }
 
     /**

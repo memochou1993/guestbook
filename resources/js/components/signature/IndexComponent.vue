@@ -1,18 +1,21 @@
 <template>
     <div>
-        <select v-model="per_page">
-            <option disabled>顯示筆數</option>
-            <option>5</option>
-            <option>10</option>
-            <option>15</option>
-        </select>
+        <div class="d-flex justify-content-end">
+            <select v-model="per_page">
+                <option disabled>顯示筆數</option>
+                <option>5</option>
+                <option>10</option>
+                <option>15</option>
+            </select>
+        </div>
 
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Content</th>
+                    <th>編號</th>
+                    <th>名字</th>
+                    <th>內容</th>
+                    <th>訊息</th>
                 </tr>
             </thead>
             <tbody>
@@ -20,28 +23,32 @@
                     <td>{{ signature.id }}</td>
                     <td>{{ signature.name }}</td>
                     <td>{{ signature.content }}</td>
+                    <td><a href="" @click.prevent="destroy(signature.id)">刪除</a></td>
                 </tr>
             </tbody>
         </table>
-        <nav aria-label="Page navigation">
-            <ul class="pagination">
-                <li class="page-item" :class="[meta.current_page == 1 ? 'disabled' : '']">
-                    <a class="page-link" href="" @click.prevent="fetch(links.first)">第一頁</a>
+        
+        <div class="d-flex justify-content-center">
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    <li class="page-item" :class="[meta.current_page == 1 ? 'disabled' : '']">
+                        <a class="page-link" href="" @click.prevent="fetch(links.first)">第一頁</a>
+                        </li>
+                    <li class="page-item" :class="[meta.current_page == 1 ? 'disabled' : '']">
+                        <a class="page-link" href="" @click.prevent="fetch(links.prev)">上一頁</a>
                     </li>
-                <li class="page-item" :class="[meta.current_page == 1 ? 'disabled' : '']">
-                    <a class="page-link" href="" @click.prevent="fetch(links.prev)">上一頁</a>
-                </li>
-                <li class="page-item" v-for="page in pages" :key="page.index" :class="[page == meta.current_page ? 'active' : '']">
-                    <a class="page-link" href="" @click.prevent="fetch(url + page)">{{ page }}</a>
-                </li>
-                <li class="page-item" :class="[meta.current_page == meta.last_page ? 'disabled' : '']">
-                    <a class="page-link" href="" @click.prevent="fetch(links.next)">下一頁</a>
-                </li>
-                <li class="page-item" :class="[meta.current_page == meta.last_page ? 'disabled' : '']">
-                    <a class="page-link" href="" @click.prevent="fetch(links.last)">最後頁</a>
-                </li>
-            </ul>
-        </nav>
+                    <li class="page-item" v-for="page in pages" :key="page.index" :class="[page == meta.current_page ? 'active' : '']">
+                        <a class="page-link" href="" @click.prevent="fetch(url + '?page=' + page)">{{ page }}</a>
+                    </li>
+                    <li class="page-item" :class="[meta.current_page == meta.last_page ? 'disabled' : '']">
+                        <a class="page-link" href="" @click.prevent="fetch(links.next)">下一頁</a>
+                    </li>
+                    <li class="page-item" :class="[meta.current_page == meta.last_page ? 'disabled' : '']">
+                        <a class="page-link" href="" @click.prevent="fetch(links.last)">最後頁</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
     </div>
 </template>
 
@@ -58,14 +65,13 @@
     }
 </style>
 
-
 <script>
     export default {
         data() {
             return {
                 url: '/api/signatures',
-                per_page: 10,
-                pagination_size: 7,
+                per_page: 5,
+                pagination_size: 5,
                 data: [],
                 links: [],
                 meta: [],
@@ -81,8 +87,8 @@
             }
         },
         methods: {
-            fetch: function (url = this.url, per_page = this.per_page) {
-                axios.get(url + '&per_page=' + per_page)
+            fetch(url = this.url + '?page=') {
+                axios.get(url + '&per_page=' + this.per_page)
                     .then(({data}) => {
                         this.data = data.data;
                         this.links = data.links;
@@ -90,7 +96,7 @@
                         this.paginate();
                     });
             },
-            paginate: function (meta = this.meta, pagination_size = this.pagination_size) {
+            paginate(meta = this.meta) {
                 let arr = [];
                 let begin;
                 let end;
@@ -112,10 +118,21 @@
                 }
 
                 for (let i = begin; i <= end; i++) {
-                    arr.push('?page=' + i);
+                    arr.push(i);
                 }
 
                 this.pages = arr;
+            },
+            destroy(id) {
+                if (confirm('確定刪除？')) {
+                    axios.delete(this.url + '/' + id)
+                        .then(response => {
+                            this.data = _.remove(this.data, function (data) {
+                                return data.id !== id;
+                            });
+                            this.fetch(this.url + '?page=' + this.meta.current_page);
+                        });
+                }
             }
         }
     }
