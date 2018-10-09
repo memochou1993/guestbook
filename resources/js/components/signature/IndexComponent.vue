@@ -70,7 +70,7 @@
         data() {
             return {
                 url: '/api/signatures',
-                per_page: 5,
+                per_page: 10,
                 pagination_size: 5,
                 data: [],
                 links: [],
@@ -115,6 +115,11 @@
                     default:
                         begin = meta.current_page - (this.pagination_size - 1) / 2;
                         end = meta.current_page + (this.pagination_size - 1) / 2;
+                }
+
+                if (meta.last_page < this.pagination_size) {
+                    begin = 1;
+                    end = meta.last_page;
                 }
 
                 for (let i = begin; i <= end; i++) {

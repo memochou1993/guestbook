@@ -47922,7 +47922,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     data: function data() {
         return {
             url: '/api/signatures',
-            per_page: 5,
+            per_page: 10,
             pagination_size: 5,
             data: [],
             links: [],
@@ -47975,6 +47975,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 default:
                     begin = meta.current_page - (this.pagination_size - 1) / 2;
                     end = meta.current_page + (this.pagination_size - 1) / 2;
+            }
+
+            if (meta.last_page < this.pagination_size) {
+                begin = 1;
+                end = meta.last_page;
             }
 
             for (var i = begin; i <= end; i++) {
@@ -48381,6 +48386,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
         return {
+            url: '/api/signatures',
             signature: {
                 name: '',
                 email: '',
@@ -48418,8 +48424,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         onSubmit: function onSubmit() {
             var _this = this;
 
+            var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.url;
+
             this.saved = false;
-            axios.post('/api/signatures', this.signature, {
+            axios.post(url, this.signature, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
