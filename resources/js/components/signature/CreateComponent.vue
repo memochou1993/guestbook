@@ -81,6 +81,7 @@
     export default {
         data() {
             return {
+                url: '/api/signatures',
                 signature: {
                     name: '',
                     email: '',
@@ -114,9 +115,9 @@
             }
         },
         methods: {
-            onSubmit() {
+            onSubmit(url = this.url) {
                 this.saved = false;
-                axios.post('/api/signatures', this.signature, {
+                axios.post(url, this.signature, {
                     headers: {
                         'Content-Type': 'application/json'
                     }
