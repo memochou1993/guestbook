@@ -20,9 +20,7 @@
                                 ]"
                                 v-model="signature.name"
                                 required>
-                            <span class="test">
-                                <span class="invalid-feedback" v-if="errors.name">{{ errors.name[0] }}</span>
-                            </span>
+                            <span class="invalid-feedback" v-if="errors.name">{{ errors.name[0] }}</span>
                         </div>
                     </div>
 
