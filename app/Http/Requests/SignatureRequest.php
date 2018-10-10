@@ -38,7 +38,7 @@ class SignatureRequest extends FormRequest
         return [
             'name' => 'required|min:3|max:10',
             'email' => 'required|email',
-            'content' => 'required',
+            'content' => 'required|min:3',
         ];
     }
 }

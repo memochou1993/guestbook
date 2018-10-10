@@ -11,7 +11,8 @@ class AddHeaders
         $response = $next($request);
         $response
             ->header('Access-Control-Allow-Origin', env('ACCESS_CONTROL_ALLOW_ORIGIN', '*'))
-            ->header('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
+            ->header('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE')
+            ->header('Access-Control-Allow-Headers', 'Content-Type');
 
         return $response;
     }
