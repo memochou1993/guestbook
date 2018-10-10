@@ -76,6 +76,8 @@ class SignatureController extends Controller
      */
     public function destroy(Signature $signature)
     {
-        $signature->delete();
+        if ($signature->delete()) {
+            return response()->json(['response' => 'success']);
+        }
     }
 }
