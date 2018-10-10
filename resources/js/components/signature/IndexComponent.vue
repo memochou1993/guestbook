@@ -1,5 +1,15 @@
 <template>
     <div>
+        <div class="row mb-3">
+            <div class="col-3 offset-9">
+                <select class="form-control" v-model="per_page">
+                    <option>5</option>
+                    <option>10</option>
+                    <option>15</option>
+                </select>
+            </div>
+        </div>
+
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -18,15 +28,6 @@
                 </tr>
             </tbody>
         </table>
-
-        <div class="d-flex justify-content-end">
-            顯示筆數：
-            <select v-model="per_page">
-                <option>5</option>
-                <option>10</option>
-                <option>15</option>
-            </select>
-        </div>
 
         <div class="d-flex justify-content-center">
             <nav aria-label="Page navigation">

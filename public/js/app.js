@@ -47472,7 +47472,7 @@ var content = __webpack_require__(45);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(47)("43a3b22c", content, false, {});
+var update = __webpack_require__(47)("54439fc6", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -47917,6 +47917,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -48012,6 +48013,47 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
+    _c("div", { staticClass: "row mb-3" }, [
+      _c("div", { staticClass: "col-3 offset-9" }, [
+        _c(
+          "select",
+          {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.per_page,
+                expression: "per_page"
+              }
+            ],
+            staticClass: "form-control",
+            on: {
+              change: function($event) {
+                var $$selectedVal = Array.prototype.filter
+                  .call($event.target.options, function(o) {
+                    return o.selected
+                  })
+                  .map(function(o) {
+                    var val = "_value" in o ? o._value : o.value
+                    return val
+                  })
+                _vm.per_page = $event.target.multiple
+                  ? $$selectedVal
+                  : $$selectedVal[0]
+              }
+            }
+          },
+          [
+            _c("option", [_vm._v("5")]),
+            _vm._v(" "),
+            _c("option", [_vm._v("10")]),
+            _vm._v(" "),
+            _c("option", [_vm._v("15")])
+          ]
+        )
+      ])
+    ]),
+    _vm._v(" "),
     _c("table", { staticClass: "table table-striped" }, [
       _vm._m(0),
       _vm._v(" "),
@@ -48042,45 +48084,6 @@ var render = function() {
             ])
           ])
         })
-      )
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "d-flex justify-content-end" }, [
-      _vm._v("\n        顯示筆數：\n        "),
-      _c(
-        "select",
-        {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.per_page,
-              expression: "per_page"
-            }
-          ],
-          on: {
-            change: function($event) {
-              var $$selectedVal = Array.prototype.filter
-                .call($event.target.options, function(o) {
-                  return o.selected
-                })
-                .map(function(o) {
-                  var val = "_value" in o ? o._value : o.value
-                  return val
-                })
-              _vm.per_page = $event.target.multiple
-                ? $$selectedVal
-                : $$selectedVal[0]
-            }
-          }
-        },
-        [
-          _c("option", [_vm._v("5")]),
-          _vm._v(" "),
-          _c("option", [_vm._v("10")]),
-          _vm._v(" "),
-          _c("option", [_vm._v("15")])
-        ]
       )
     ]),
     _vm._v(" "),
@@ -48380,8 +48383,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -48392,6 +48393,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 email: '',
                 content: ''
             },
+            validation: {
+                name: /^[a-zA-Z0-9\u4e00-\u9fa5]{3,30}$/,
+                email: /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+$/,
+                content: /^.{3,30}$/
+            },
             saved: false,
             errors: []
         };
@@ -48399,39 +48405,30 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     computed: {
         nameIsValid: function nameIsValid() {
-            var reg = /^[a-zA-Z0-9\u4e00-\u9fa5]+$/;
-            return reg.test(this.signature.name.trim());
+            return this.validation.name.test(this.signature.name.trim());
         },
         nameIsInvalid: function nameIsInvalid() {
-            return this.signature.name.trim() === '' && this.errors.name;
+            return !this.validation.name.test(this.signature.name.trim()) && this.errors.name;
         },
         emailIsValid: function emailIsValid() {
-            var reg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
-            return reg.test(this.signature.email.trim());
+            return this.validation.email.test(this.signature.email.trim());
         },
         emailIsInvalid: function emailIsInvalid() {
-            return this.signature.email.trim() === '' && this.errors.email;
+            return !this.validation.email.test(this.signature.email.trim()) && this.errors.email;
         },
         contentIsValid: function contentIsValid() {
-            var reg = /^.+$/;
-            return reg.test(this.signature.content.trim());
+            return this.validation.content.test(this.signature.content.trim());
         },
         contentIsInvalid: function contentIsInvalid() {
-            return this.signature.content.trim() === '' && this.errors.content;
+            return !this.validation.content.test(this.signature.content.trim()) && this.errors.content;
         }
     },
     methods: {
         onSubmit: function onSubmit() {
             var _this = this;
 
-            var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.url;
-
             this.saved = false;
-            axios.post(url, this.signature, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }).then(function (_ref) {
+            axios.post(this.url, this.signature).then(function (_ref) {
                 var data = _ref.data;
 
                 _this.success();
@@ -48468,174 +48465,167 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("div", [
-      _c(
-        "form",
-        {
-          attrs: { method: "post" },
-          on: {
-            submit: function($event) {
-              $event.preventDefault()
-              return _vm.onSubmit($event)
-            }
+    _c(
+      "form",
+      {
+        on: {
+          submit: function($event) {
+            $event.preventDefault()
+            return _vm.onSubmit($event)
           }
-        },
-        [
-          _c("fieldset", [
-            _c("legend", { staticClass: "text-center" }, [_vm._v("GuestBook")]),
+        }
+      },
+      [
+        _c("fieldset", [
+          _c("legend", { staticClass: "text-center" }, [_vm._v("GuestBook")]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", { attrs: { for: "name" } }, [_vm._v("名字")]),
             _vm._v(" "),
-            _c("div", { staticClass: "form-group" }, [
-              _c("label", { attrs: { for: "name" } }, [_vm._v("名字")]),
-              _vm._v(" "),
-              _c("div", [
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.signature.name,
-                      expression: "signature.name"
-                    }
-                  ],
-                  class: [
-                    "form-control",
-                    {
-                      "is-valid": _vm.nameIsValid,
-                      "is-invalid": _vm.nameIsInvalid
-                    }
-                  ],
-                  attrs: {
-                    type: "text",
-                    minlength: "3",
-                    maxlength: "30",
-                    id: "name",
-                    required: ""
-                  },
-                  domProps: { value: _vm.signature.name },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.$set(_vm.signature, "name", $event.target.value)
-                    }
+            _c("div", [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.signature.name,
+                    expression: "signature.name"
                   }
-                }),
-                _vm._v(" "),
-                _vm.errors.name
-                  ? _c("span", { staticClass: "invalid-feedback" }, [
-                      _vm._v(_vm._s(_vm.errors.name[0]))
-                    ])
-                  : _vm._e()
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "form-group" }, [
-              _c("label", { attrs: { for: "email" } }, [_vm._v("信箱")]),
-              _vm._v(" "),
-              _c("div", [
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.signature.email,
-                      expression: "signature.email"
-                    }
-                  ],
-                  class: [
-                    "form-control",
-                    {
-                      "is-valid": _vm.emailIsValid,
-                      "is-invalid": _vm.emailIsInvalid
-                    }
-                  ],
-                  attrs: {
-                    type: "email",
-                    minlength: "3",
-                    maxlength: "30",
-                    id: "email",
-                    required: ""
-                  },
-                  domProps: { value: _vm.signature.email },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.$set(_vm.signature, "email", $event.target.value)
-                    }
+                ],
+                class: [
+                  "form-control",
+                  {
+                    "is-valid": _vm.nameIsValid,
+                    "is-invalid": _vm.nameIsInvalid
                   }
-                }),
-                _vm._v(" "),
-                _vm.errors.email
-                  ? _c("span", { staticClass: "invalid-feedback" }, [
-                      _vm._v(_vm._s(_vm.errors.email[0]))
-                    ])
-                  : _vm._e()
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "form-group" }, [
-              _c("label", { attrs: { for: "content" } }, [_vm._v("訊息")]),
-              _vm._v(" "),
-              _c("div", [
-                _c("textarea", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.signature.content,
-                      expression: "signature.content"
+                ],
+                attrs: {
+                  type: "text",
+                  minlength: "3",
+                  maxlength: "30",
+                  id: "name",
+                  required: ""
+                },
+                domProps: { value: _vm.signature.name },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
                     }
-                  ],
-                  class: [
-                    "form-control",
-                    {
-                      "is-valid": _vm.contentIsValid,
-                      "is-invalid": _vm.contentIsInvalid
-                    }
-                  ],
-                  attrs: { id: "content", required: "" },
-                  domProps: { value: _vm.signature.content },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.$set(_vm.signature, "content", $event.target.value)
-                    }
+                    _vm.$set(_vm.signature, "name", $event.target.value)
                   }
-                }),
-                _vm._v(" "),
-                _vm.errors.content
-                  ? _c("span", { staticClass: "invalid-feedback" }, [
-                      _vm._v(_vm._s(_vm.errors.content[0]))
-                    ])
-                  : _vm._e()
-              ])
-            ]),
-            _vm._v(" "),
-            _vm._m(0)
-          ])
-        ]
-      ),
-      _vm._v(" "),
-      _vm.saved
-        ? _c(
-            "div",
-            {
-              staticClass: "alert alert-success alert-dismissible fade show",
-              attrs: { role: "alert" }
-            },
-            [
-              _c("strong", [_vm._v("成功！表單已送出！")]),
+                }
+              }),
               _vm._v(" "),
-              _vm._m(1)
-            ]
-          )
-        : _vm._e()
-    ])
+              _vm.nameIsInvalid
+                ? _c("span", { staticClass: "invalid-feedback" }, [
+                    _vm._v(_vm._s(_vm.errors.name[0]))
+                  ])
+                : _vm._e()
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", { attrs: { for: "email" } }, [_vm._v("信箱")]),
+            _vm._v(" "),
+            _c("div", [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.signature.email,
+                    expression: "signature.email"
+                  }
+                ],
+                class: [
+                  "form-control",
+                  {
+                    "is-valid": _vm.emailIsValid,
+                    "is-invalid": _vm.emailIsInvalid
+                  }
+                ],
+                attrs: {
+                  type: "email",
+                  minlength: "3",
+                  maxlength: "30",
+                  id: "email",
+                  required: ""
+                },
+                domProps: { value: _vm.signature.email },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.signature, "email", $event.target.value)
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _vm.emailIsInvalid
+                ? _c("span", { staticClass: "invalid-feedback" }, [
+                    _vm._v(_vm._s(_vm.errors.email[0]))
+                  ])
+                : _vm._e()
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", { attrs: { for: "content" } }, [_vm._v("訊息")]),
+            _vm._v(" "),
+            _c("div", [
+              _c("textarea", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.signature.content,
+                    expression: "signature.content"
+                  }
+                ],
+                class: [
+                  "form-control",
+                  {
+                    "is-valid": _vm.contentIsValid,
+                    "is-invalid": _vm.contentIsInvalid
+                  }
+                ],
+                attrs: { id: "content", required: "" },
+                domProps: { value: _vm.signature.content },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.signature, "content", $event.target.value)
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _vm.contentIsInvalid
+                ? _c("span", { staticClass: "invalid-feedback" }, [
+                    _vm._v(_vm._s(_vm.errors.content[0]))
+                  ])
+                : _vm._e()
+            ])
+          ]),
+          _vm._v(" "),
+          _vm._m(0)
+        ])
+      ]
+    ),
+    _vm._v(" "),
+    _vm.saved
+      ? _c(
+          "div",
+          {
+            staticClass: "alert alert-success alert-dismissible fade show",
+            attrs: { role: "alert" }
+          },
+          [_c("strong", [_vm._v("成功！表單已送出！")]), _vm._v(" "), _vm._m(1)]
+        )
+      : _vm._e()
   ])
 }
 var staticRenderFns = [
