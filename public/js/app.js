@@ -48069,9 +48069,9 @@ var render = function() {
             _vm._v(" "),
             _c("td", [
               _c(
-                "a",
+                "button",
                 {
-                  attrs: { href: "" },
+                  staticClass: "btn btn-danger btn-sm",
                   on: {
                     click: function($event) {
                       $event.preventDefault()
@@ -48383,6 +48383,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -48440,12 +48441,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         success: function success() {
             this.saved = true;
-            this.reset();
+            this.onReset();
         },
         error: function error(data) {
             this.errors = data;
         },
-        reset: function reset() {
+        onReset: function onReset() {
             this.errors = [];
             this.signature = {
                 name: '',
@@ -48472,12 +48473,13 @@ var render = function() {
           submit: function($event) {
             $event.preventDefault()
             return _vm.onSubmit($event)
-          }
+          },
+          reset: _vm.onReset
         }
       },
       [
         _c("fieldset", [
-          _c("legend", { staticClass: "text-center" }, [_vm._v("GuestBook")]),
+          _c("legend", { staticClass: "text-center" }, [_vm._v("Guestbook")]),
           _vm._v(" "),
           _c("div", { staticClass: "form-group" }, [
             _c("label", { attrs: { for: "name" } }, [_vm._v("名字")]),
@@ -48638,7 +48640,13 @@ var staticRenderFns = [
         _c(
           "button",
           { staticClass: "btn btn-primary", attrs: { type: "submit" } },
-          [_vm._v("Submit")]
+          [_vm._v("送出")]
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          { staticClass: "btn btn-danger", attrs: { type: "reset" } },
+          [_vm._v("重設")]
         )
       ])
     ])

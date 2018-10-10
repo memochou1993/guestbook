@@ -24,7 +24,7 @@
                     <td>{{ signature.id }}</td>
                     <td>{{ signature.name }}</td>
                     <td>{{ signature.content }}</td>
-                    <td><a href="" @click.prevent="destroy(signature.id)">刪除</a></td>
+                    <td><button class="btn btn-danger btn-sm" @click.prevent="destroy(signature.id)">刪除</button></td>
                 </tr>
             </tbody>
         </table>

@@ -1,8 +1,8 @@
 <template>
     <div>
-        <form @submit.prevent="onSubmit">
+        <form @submit.prevent="onSubmit" @reset="onReset">
             <fieldset>
-                <legend class="text-center">GuestBook</legend>
+                <legend class="text-center">Guestbook</legend>
 
                 <div class="form-group">
                     <label for="name">名字</label>
@@ -60,7 +60,8 @@
 
                 <div class="form-group">
                     <div class="text-center">
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-primary">送出</button>
+                        <button type="reset" class="btn btn-danger">重設</button>
                     </div>
                 </div>
             </fieldset>
@@ -127,12 +128,12 @@
             },
             success() {
                 this.saved = true;
-                this.reset();
+                this.onReset();
             },
             error(data) {
                 this.errors = data;
             },
-            reset() {
+            onReset() {
                 this.errors = [];
                 this.signature = {
                     name: '',
